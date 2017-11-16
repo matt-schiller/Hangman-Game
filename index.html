@@ -1,0 +1,222 @@
+<html>
+	<head>
+		<title>Hangman Game</title>
+		<link rel="stylesheet" href="assets/css/style.css">
+		<!-- <link href="https://fonts.googleapis.com/css?family=Libre+Baskerville|Open+Sans" rel="stylesheet"> -->
+		<script src="https://code.jquery.com/jquery-3.2.1.min.js" integrity="sha256-hwg4gsxgFZhOsEEamdOYGBf13FyQuiTwlAQgxVSNgt4=" crossorigin="anonymous"></script>
+		<!-- <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css" rel="stylesheet"> -->
+		<link rel="stylesheet" href="assets/css/bootstrap.min.css" rel="stylesheet">
+		<script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
+		<link href="https://maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css" rel="stylesheet">
+	</head>
+	<body>
+		<nav class="navbar navbar-default">
+			<div class="container-fluid">
+
+				<div class="navbar-header">
+					<button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#bs-example-navbar-collapse-1" aria-expanded="false">
+						<span class="sr-only">Toggle navigation</span>
+						<span class="icon-bar"></span>
+						<span class="icon-bar"></span>
+						<span class="icon-bar"></span>
+					</button>
+					<a class="navbar-brand" href="#">Hangman</a>
+				</div>
+				<div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
+					<ul class="nav navbar-nav navbar-right">
+						<li><a href="https://github.com/matt-schiller/Hangman-Game">Project on Github</a></li>
+						<li><a href="http://www.mdschiller.com.au">Author Portfolio</a></li>
+					</ul>
+				</div>
+			</div>
+		</nav>
+		<div class="container">
+			<div class="jumbotron">
+				<h1>The Great Dictator Hangman</h1>
+				<p>Play hangman with the hangmen</p>
+			</div>
+			<div class="row">
+				<div class="col-xs-6">
+					<div class="panel panel-primary">
+						<div class="panel-heading">Current Dictator</div>
+						<div class="panel-body" id="word" style="font-size:30px;"></div>
+					</div>
+				</div>
+				<div class="col-xs-6">
+					<div style="height:115px; background-image: url('assets/images/dictators.jpg'); background-size: cover; background-position:center;">
+					</div>
+				</div>
+			</div>
+			<div class="row">
+				<div class="col-xs-6">
+					<div class="panel panel-default">
+						<div class="panel-heading">Current Game</div>
+						<div class="panel-body">
+							<p><strong>Guesses remaining</strong></p>
+							<p id="guesses-remaining"></p>
+							<hr>
+							<p><strong>Letters guessed</strong></p>
+							<p id="letters-guessed">(none)</p>
+						</div>
+					</div>
+				</div>
+				<div class="col-xs-6">
+					<div class="panel panel-default">
+						<div class="panel-heading">Scoreboard</div>
+							<div class="panel-body">
+								<p><strong>Wins</strong></p>
+								<p id="wins">0</p>
+								<hr>
+								<p><strong>Losses</strong></p>
+								<p id="losses">0</p>
+							</div>
+						</div>
+					</div>
+				</div>
+			</div>
+<div class="modal" id="win-modal">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+        <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+        <h4 class="modal-title">You win!</h4>
+      </div>
+      <div class="modal-body">
+        <p>Nice job. Now let's play another game...</p>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-default" data-dismiss="modal">Next game</button>
+      </div>
+    </div>
+  </div>
+</div>
+<div class="modal" id="lose-modal">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+        <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+        <h4 class="modal-title">You lose!</h4>
+      </div>
+      <div class="modal-body">
+        <p>Bad luck! Time to get back on the proverbial horse and play another game...</p>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-default" data-dismiss="modal">Next game</button>
+      </div>
+    </div>
+  </div>
+</div>
+			<!-- <h1>Hangman game</h1>
+			<div>
+				<hr>
+				<h3>Word</h3>
+				<div id="word"></div>
+			</div> -->
+<!-- 			<div>
+				<hr>
+				<h3>Wins</h3>
+				<p id="wins">0</p>
+			</div>
+			<div>
+				<hr>
+				<h3>Losses</h3>
+				<p id="losses">0</p>
+			</div> -->
+			<!-- <div>
+				<hr>
+				<h3>Guesses remaining</h3>
+				<p id="guesses-remaining"></p>
+			</div> -->
+			<!-- <div>
+				<hr>
+				<h3>Letters guessed</h3>
+				<p id="letters-guessed"></p>
+			</div> -->
+		<!-- </div> -->
+
+		<script>
+			//Set words upfront
+			var words = ["elephant","smart cat","snake","dragon"];
+			var wordsCount = words.length;
+
+			//Setup game parameters
+			var wins = 0;
+			var losses = 0;
+			var guessesRemaining;
+			var lettersGuessed;
+			var currentWord;
+
+			//Start a new subgame with a new word
+			function setup() {
+
+				//Clear space
+				document.getElementById("word").innerHTML = "";
+				
+				//Select random word from list
+				var currentWordIndex = Math.floor(Math.random()*wordsCount);
+				currentWord = words[currentWordIndex];
+
+				//Create placeholders
+				for (i=0; i<currentWord.length; i++) {
+					var newSpan = document.createElement("span");
+					if (currentWord[i]== " ") {
+						newSpan.innerHTML = ". ";
+						newSpan.style.opacity = "0";
+					} else {
+					newSpan.innerHTML = "_ ";
+					};
+					newSpan.id = i;
+					document.getElementById("word").appendChild(newSpan);
+				};
+
+				//Set subgame starting parameters
+				guessesRemaining = 8;
+				document.getElementById("guesses-remaining").innerHTML = guessesRemaining;
+				lettersGuessed = [];
+				document.getElementById("letters-guessed").innerHTML = "none";
+			};
+
+			setup();
+
+			//When key pressed start subgame routine
+			window.onkeydown = function(event) {
+				var character = String.fromCharCode(event.keyCode).toLowerCase();
+
+				//Check if character has already been guessed
+				if (lettersGuessed.indexOf(character) > -1) {
+					alert("You already guessed that letter!");
+
+				//Check if character is a valid letter
+				} else if (character.match(/[a-z]/i)) {
+					guessesRemaining--;
+					document.getElementById("guesses-remaining").innerHTML = guessesRemaining;
+					lettersGuessed.push(character);
+					document.getElementById("letters-guessed").innerHTML = lettersGuessed;
+					//Reveal letter if in placeholders
+					for (i=0; i<currentWord.length; i++) {
+						if (currentWord.charAt(i) == character) {
+							document.getElementById(i).innerHTML = character + " ";
+						};
+					};
+					//Check if 'win' condition met
+					if(document.getElementById("word").innerHTML.indexOf("_ ") == -1) {
+						wins++;
+						document.getElementById("wins").innerHTML = wins;
+						$('#win-modal').modal() 
+						setup();
+					//Check if 'loss' condition met
+					} else if (guessesRemaining == 0) {
+						losses++;
+						document.getElementById("losses").innerHTML = losses;
+						$('#lose-modal').modal() 
+						setup();
+					};
+				} else {
+					alert("Hmm, you didn't press a letter");
+				};
+			};
+
+
+		</script>	
+	</body>
+</html>
