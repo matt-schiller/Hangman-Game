@@ -1,28 +1,28 @@
 //Set words upfront
 var words = [
-	"Joseph Stalin",
-	"Mao Zedong",
-	"Benito Mussolini",
-	"Pol Pot",
-	"Kim Jong Il",
-	"Saddam Hussein",
-	"Robert Mugabe",
-	"Kim Jong Un",
-	"Fidel Castro",
-	"Chiang Kai Shek",
-	"Idi Amin",
-	"Bashar Al Assad",
-	"Ferdinand Marcos",
-	"Francisco Franco",
-	"Ho Chi Minh",
-	"Muammar Gaddafi",
-	"Nikita Khrushchev",
-	"Augusto Pinochet",
-	"Suharto",
-	"Vladimir Lenin",
-	"Emperor Hirohito",
-	"Kaiser Wilhelm",
-	"Adolf Hitler"	
+	"joseph stalin",
+	"mao zedong",
+	"benito mussolini",
+	"pol pot",
+	"kim jong il",
+	"saddam hussein",
+	"robert mugabe",
+	"kim jong un",
+	"fidel castro",
+	"chiang kai shek",
+	"idi amin",
+	"bashar al assad",
+	"ferdinand marcos",
+	"francisco franco",
+	"ho chi minh",
+	"muammar gaddafi",
+	"nikita khrushchev",
+	"augusto pinochet",
+	"suharto",
+	"vladimir lenin",
+	"emperor hirohito",
+	"kaiser wilhelm",
+	"adolf hitler"	
 	];
 var wordsCount = words.length;
 
@@ -75,7 +75,10 @@ window.onkeydown = function(event) {
 
 	//Check if character is a valid letter
 	} else if (character.match(/[a-z]/i)) {
-		guessesRemaining--;
+		//Decrement 'guesses remaining' only if the character isn't in the word
+		if (currentWord.indexOf(character) == -1) {
+			guessesRemaining--;
+		};
 		document.getElementById("guesses-remaining").innerHTML = guessesRemaining;
 		lettersGuessed.push(character);
 		document.getElementById("letters-guessed").innerHTML = lettersGuessed.join(" ");
