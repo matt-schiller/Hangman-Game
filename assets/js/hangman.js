@@ -60,7 +60,7 @@ function setup() {
 	guessesRemaining = 8;
 	document.getElementById("guesses-remaining").innerHTML = guessesRemaining;
 	lettersGuessed = [];
-	document.getElementById("letters-guessed").innerHTML = "none";
+	document.getElementById("letters-guessed").innerHTML = "-";
 };
 
 setup();
@@ -78,7 +78,7 @@ window.onkeydown = function(event) {
 		guessesRemaining--;
 		document.getElementById("guesses-remaining").innerHTML = guessesRemaining;
 		lettersGuessed.push(character);
-		document.getElementById("letters-guessed").innerHTML = lettersGuessed;
+		document.getElementById("letters-guessed").innerHTML = lettersGuessed.join(" ");
 		//Reveal letter if in placeholders
 		for (i=0; i<currentWord.length; i++) {
 			if (currentWord.charAt(i) == character) {
